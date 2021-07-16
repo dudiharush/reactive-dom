@@ -1,18 +1,20 @@
 import React from "react";
 
 const getWidth = () => {
-  const notify: Function[] = [];
+  const notifyMap: Map<number, Function> = new Map();
   const setWidth = (size: number | undefined) => {
-    notify.forEach((f) => f(size));
+    notifyMap.forEach((f) => f(size));
   };
 
   return {
     useWidth: () => {
+      const key = React.useRef(Math.random());
+
       let [innerWidth, setInnerWidth] = React.useState<number | undefined>();
       return {
         setWidth,
         get width() {
-          notify.push(setInnerWidth);
+          notifyMap.set(key.current, setInnerWidth);
           return innerWidth;
         }
       };
